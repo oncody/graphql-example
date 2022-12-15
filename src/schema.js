@@ -13,10 +13,10 @@ let schema = buildSchema(`
   
   type AuthorsConnection {
     pageInfo: PageInfo!
-    edges: [AuthorsEdge]
+    edges: [AuthorEdge]
   }
   
-  type AuthorsEdge {
+  type AuthorEdge {
     cursor: Int!
     node: Author
   }
