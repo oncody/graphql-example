@@ -3,13 +3,13 @@ import Author from "./Author.js";
 import PageInfo from "./PageInfo.js";
 import AuthorEdge from "./AuthorEdge.js";
 
-const LIMIT = 2;
+const MAX_LIMIT = 2;
 
 export default class Authors {
     constructor(first, after) {
-        let limit = LIMIT;
+        let limit = MAX_LIMIT;
 
-        if(first > 0 && first < LIMIT) {
+        if(first > 0 && first < MAX_LIMIT) {
             limit = first;
         }
 
