@@ -1,4 +1,4 @@
-import authors from "../data/database.js";
+import authors from "../../data/database.js";
 import Author from "./Author.js";
 import PageInfo from "../PageInfo.js";
 import AuthorEdge from "./AuthorEdge.js";

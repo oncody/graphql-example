@@ -1,7 +1,7 @@
-import authors from "../../data/database.js";
+import authors from "../../../data/database.js";
 import PageInfo from "../../PageInfo.js";
 import AuthorBookEdge from "./AuthorBookEdge.js";
-import Book from "./Book.js";
+import Book from "../../Book.js";
 
 const MAX_LIMIT = 2;
 

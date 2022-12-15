@@ -1,4 +1,4 @@
-import Authors from "./author/Authors.js";
+import Authors from "./types/author/Authors.js";
 
 let root = {
     hello: () => {
