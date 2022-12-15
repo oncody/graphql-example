@@ -1,12 +1,16 @@
-var express = require('express');
-var { graphqlHTTP } = require('express-graphql');
-var { buildSchema } = require('graphql');
+let express = require('express');
+let { graphqlHTTP } = require('express-graphql');
+let { buildSchema } = require('graphql');
 
-var schema = buildSchema(`
+let schema = buildSchema(`
+  type Query {
+    hello: String
+    authors(first: Int, after: Int): AuthorsConnection
+  }
   
   type PageInfo {
     hasNextPage: Boolean!
-    endCursor: String
+    endCursor: Int
   }
   
   type AuthorsConnection {
@@ -15,17 +19,13 @@ var schema = buildSchema(`
   }
   
   type AuthorsEdge {
-    cursor: String!
+    cursor: Int!
     node: Author
   }
   
   type Author {
     id: Int
     name: String
-    booksConnection(
-      first: Int
-      after: String
-    ) : AuthorBooksConnection
   }
   
   type AuthorBooksConnection {
@@ -34,7 +34,7 @@ var schema = buildSchema(`
   }
   
   type AuthorBooksEdge {
-    cursor: String!
+    cursor: Int!
     node: Book
   }
   
@@ -46,7 +46,11 @@ var schema = buildSchema(`
   
 `);
 
-var authors = [
+let authors = [
+  {
+    id: 0,
+    name: 'author0'
+  },
   {
     id: 1,
     name: 'author1'
@@ -59,97 +63,135 @@ var authors = [
     id: 3,
     name: 'author3'
   },
-  {
-    id: 4,
-    name: 'author4'
-  },
 ];
 
-var author1books = [
-  {
-    id: 1,
-    title: 'author1book1'
-  },
-  {
-    id: 2,
-    title: 'author1book2'
-  },
-  {
-    id: 3,
-    title: 'author1book3'
-  },
+let author0books = [
   {
     id: 4,
-    title: 'author1book4'
+    title: 'author0book0'
   },
-];
-
-var author2books = [
   {
     id: 5,
-    title: 'author2book1'
+    title: 'author0book1'
   },
   {
     id: 6,
-    title: 'author2book2'
+    title: 'author0book2'
   },
   {
     id: 7,
-    title: 'author2book3'
-  },
-  {
-    id: 8,
-    title: 'author2book4'
+    title: 'author0book3'
   },
 ];
 
-var author3books = [
+let author1books = [
+  {
+    id: 8,
+    title: 'author1book0'
+  },
   {
     id: 9,
-    title: 'author3book1'
+    title: 'author1book1'
   },
   {
     id: 10,
-    title: 'author3book2'
+    title: 'author1book2'
   },
   {
     id: 11,
-    title: 'author3book3'
-  },
-  {
-    id: 12,
-    title: 'author3book4'
+    title: 'author1book3'
   },
 ];
 
-var author4books = [
+let author2books = [
+  {
+    id: 12,
+    title: 'author2book0'
+  },
   {
     id: 13,
-    title: 'author4book1'
+    title: 'author2book1'
   },
   {
     id: 14,
-    title: 'author4book2'
+    title: 'author2book2'
   },
   {
     id: 15,
-    title: 'author4book3'
-  },
-  {
-    id: 16,
-    title: 'author4book4'
+    title: 'author2book3'
   },
 ];
 
-var root = {
-  authors: (first, after) => {
-    return {
-      id: 1
+let author3books = [
+  {
+    id: 16,
+    title: 'author3book0'
+  },
+  {
+    id: 17,
+    title: 'author3book1'
+  },
+  {
+    id: 18,
+    title: 'author3book2'
+  },
+  {
+    id: 19,
+    title: 'author3book3'
+  },
+];
+
+const LIMIT = 2;
+
+let root = {
+  hello: () => {
+    return 'Hello world!';
+  },
+  authors: ({first, after}) => {
+    let limit = LIMIT;
+
+    if(first > 0 && first < LIMIT) {
+      limit = first;
     }
-  }
+
+    let startingIndex = (after != null) ? after + 1 : 0;
+
+    let authorsEdges = [];
+    let endCursor = 0;
+
+    for(let i = startingIndex; i < startingIndex + limit; i++) {
+
+
+      if (i >= authors.length) {
+        break;
+      }
+
+      let authorNode = authors[i];
+
+      let authorsEdge = {
+        cursor: authorNode.id,
+        node: authorNode
+      }
+
+      endCursor = authorNode.id;
+      authorsEdges.push(authorsEdge);
+    }
+
+    let pageInfo = {
+      hasNextPage: (startingIndex + limit) < authors.length,
+      endCursor: endCursor,
+    };
+
+    let authorsConnection = {
+      pageInfo: pageInfo,
+      edges: authorsEdges,
+    }
+
+    return authorsConnection;
+  },
 };
 
-var app = express();
+let app = express();
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
