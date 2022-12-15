@@ -1,4 +1,5 @@
 import authors from "./database.js";
+import AuthorBooks from "./AuthorBooks.js";
 
 export default class Author {
     constructor(id) {
@@ -8,5 +9,9 @@ export default class Author {
 
     name() {
         return this.author.name;
+    }
+
+    booksConnection(first, after) {
+        return new AuthorBooks(this, first, after);
     }
 }
