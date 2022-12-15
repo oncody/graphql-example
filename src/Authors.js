@@ -15,7 +15,7 @@ export default class Authors {
 
         let startingIndex = (after != null) ? after + 1 : 0;
 
-        let edges = [];
+        this.edges = [];
         let endCursor = 0;
 
         for(let i = startingIndex; i < startingIndex + limit; i++) {
@@ -26,11 +26,10 @@ export default class Authors {
             let author = new Author(i);
             let authorEdge = new AuthorEdge(author.id, author);
             endCursor = author.id;
-            edges.push(authorEdge);
+            this.edges.push(authorEdge);
         }
 
         let hasNextPage = (startingIndex + limit) < authors.length;
         this.pageInfo = new PageInfo(hasNextPage, endCursor);
-        this.edges = edges;
     }
 }
