@@ -1,5 +1,5 @@
-import authors from "./database.js";
-import PageInfo from "./PageInfo.js";
+import authors from "../../data/database.js";
+import PageInfo from "../../PageInfo.js";
 import AuthorBookEdge from "./AuthorBookEdge.js";
 import Book from "./Book.js";
 

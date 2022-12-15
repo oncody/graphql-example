@@ -1,5 +1,5 @@
-import authors from "./database.js";
-import AuthorBooks from "./AuthorBooks.js";
+import authors from "../data/database.js";
+import AuthorBooks from "./book/AuthorBooks.js";
 
 export default class Author {
     constructor(id) {
